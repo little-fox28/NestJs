@@ -10,16 +10,16 @@ export class ProductService {
     @InjectModel("Product") private readonly productModel: Model<Product>
   ) {}
 
-  async create(
-    name: string,
-    price: number,
-    description: string
-  ): Promise<ProductDocument> {
-    const newProduct = new this.productModel({ name, price, description });
+  async create(product: ProductDocument): Promise<ProductDocument> {
+    const newProduct = new this.productModel(product);
     return newProduct.save();
   }
 
   async findAll(): Promise<Product[]> {
-    return this.productModel.find().exec();
+    return (await this.productModel.find()).reverse();
+  }
+
+  async findOne(productName: string): Promise<ProductDocument> {
+    return this.productModel.findOne({ name: productName });
   }
 }
