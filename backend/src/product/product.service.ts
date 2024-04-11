@@ -15,11 +15,20 @@ export class ProductService {
     return newProduct.save();
   }
 
-  async findAll(): Promise<Product[]> {
-    return (await this.productModel.find()).reverse();
+  async findAll() {
+    const listOfProduct = (await this.productModel.find()).reverse();
+    return listOfProduct;
   }
 
-  async findOne(productName: string): Promise<ProductDocument> {
-    return this.productModel.findOne({ name: productName });
+  async findOne(name: string) {
+    return await this.productModel.find({ name });
+  }
+
+  async updateOne(id: string, data: ProductDocument) {
+    return await this.productModel.findByIdAndUpdate(id, data);
+  }
+
+  async deleteOne(id: string) {
+    return await this.productModel.findByIdAndDelete(id);
   }
 }
