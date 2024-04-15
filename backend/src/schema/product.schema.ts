@@ -1,10 +1,16 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from "class-validator";
 import { Document } from "mongoose";
 
 @Schema()
 export class Product extends Document {
-  @Prop()
+  @Prop({ type: String, unique: true })
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -18,6 +24,16 @@ export class Product extends Document {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @Prop({ type: Date, default: Date.now() })
+  @IsDate()
+  @IsNotEmpty()
+  createdAt: Date;
+
+  @Prop({ type: Date, default: Date.now() })
+  @IsDate()
+  @IsNotEmpty()
+  updatedAt: Date;
 }
 
 export type ProductDocument = Product;

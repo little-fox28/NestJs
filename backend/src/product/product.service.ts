@@ -25,7 +25,7 @@ export class ProductService {
   }
 
   async updateOne(id: string, data: ProductDocument) {
-    return await this.productModel.findByIdAndUpdate(id, data);
+    return await this.productModel.findByIdAndUpdate(id, data, { new: true });
   }
 
   async deleteOne(id: string) {

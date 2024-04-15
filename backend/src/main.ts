@@ -9,6 +9,8 @@ async function bootstrap() {
       whitelist: true,
     })
   );
+  app.enableCors();
+  app.setGlobalPrefix("apis");
   await app.listen(8000).then(() => {
     console.log(" 🚀 Server is running...");
   });
