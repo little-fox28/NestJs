@@ -5,13 +5,4 @@ import { UserDocument } from "src/schema/user.schema";
 @Controller("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Post()
-  createUser(@Body() user: UserDocument) {
-    return this.userService.createUser(user);
-  }
-
-  @Get()
-  hello() {
-    return "Hello";
-  }
 }

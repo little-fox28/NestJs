@@ -10,8 +10,8 @@ import { AuthModule } from "./auth/auth.module";
   imports: [
     MongooseModule.forRoot("mongodb://root:1@localhost:27017"),
     AuthModule,
-    ProductModule,
     UserModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],

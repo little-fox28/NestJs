@@ -1,16 +1,14 @@
-import { UserService } from "./../user/user.service";
 import { Injectable } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
 import { UserDocument } from "src/schema/user.schema";
+import { UserService } from "src/user/user.service";
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel("User") private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) {}
+
   async register(user: UserDocument): Promise<UserDocument> {
     try {
-      const newUser = await this.userService.createUser(user);
-      return newUser;
+      return await this.userService.register(user);
     } catch (error) {
       throw new Error(`Could not register user: ${error.message}`);
     }
@@ -18,7 +16,7 @@ export class AuthService {
 
   async login(email, password) {
     try {
-      return await this.userService.findOneUser(email, password);
+      return await this.userService.login(email, password);
     } catch (error) {
       throw new Error(`Could not found user: ${error.message}`);
     }

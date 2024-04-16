@@ -8,8 +8,6 @@ import { Model } from "mongoose";
 
 @Injectable()
 export class UserService {
-  static createUser: any;
-  static findOneUser: any;
   constructor(@InjectModel("User") private userModel: Model<UserDocument>) {}
 
   _getUserDetails(user: UserDocument): iUserDetails {
@@ -20,7 +18,7 @@ export class UserService {
     };
   }
 
-  async createUser(user: UserDocument): Promise<UserDocument> {
+  async register(user: UserDocument): Promise<UserDocument> {
     try {
       const hashedPassword = await bcrypt.hash(user.password, 10);
       const newUser = new this.userModel({ ...user, password: hashedPassword });
@@ -31,7 +29,7 @@ export class UserService {
     }
   }
 
-  async findOneUser(email: string, password: string): Promise<UserDocument> {
+  async login(email: string, password: string): Promise<UserDocument> {
     const foundUser = await this.userModel.findOne({ email: email });
     if (!foundUser) {
       throw new Error(`Could not found user with email: ${email}`);
