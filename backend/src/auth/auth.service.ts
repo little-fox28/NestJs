@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { ExistingUserDTO } from "src/dto/user.dto";
+import { UserDTO } from "src/dto/user.dto";
 import { UserDocument } from "src/schema/user.schema";
 import * as bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
@@ -26,17 +26,19 @@ export class AuthService {
     }
   }
 
-  async login(user: ExistingUserDTO): Promise<UserDocument> {
+  async login(user: UserDTO): Promise<{ token: string }> {
     try {
       const foundUser = await this.userModel.findOne({ email: user.email });
       const verifyPassword = await bcrypt.compare(
         user.password,
         foundUser.password
       );
-      if (verifyPassword) {
-        return foundUser;
+      if (!verifyPassword) {
+        throw new Error("Invalid password");
       }
-      throw new Error("Wrong password!");
+      return {
+        token: await this.jwtService.signAsync({ foundUser }),
+      };
     } catch (error) {
       throw new Error(`[authService ERR:] ${error.message}`);
     }
