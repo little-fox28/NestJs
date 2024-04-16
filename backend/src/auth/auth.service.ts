@@ -4,10 +4,14 @@ import { Model } from "mongoose";
 import { ExistingUserDTO } from "src/dto/user.dto";
 import { UserDocument } from "src/schema/user.schema";
 import * as bcrypt from "bcryptjs";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel("User") private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel("User") private userModel: Model<UserDocument>,
+    private jwtService: JwtService
+  ) {}
 
   async register(user: UserDocument): Promise<UserDocument> {
     try {
@@ -32,6 +36,7 @@ export class AuthService {
       if (verifyPassword) {
         return foundUser;
       }
+      throw new Error("Wrong password!");
     } catch (error) {
       throw new Error(`[authService ERR:] ${error.message}`);
     }
