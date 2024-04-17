@@ -6,6 +6,11 @@ import { UserDocument } from "src/schema/user.schema";
 import * as bcrypt from "bcryptjs";
 import { JwtService } from "@nestjs/jwt";
 
+interface LoginResponse {
+  token: string;
+  user: UserDocument;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -26,9 +31,12 @@ export class AuthService {
     }
   }
 
-  async login(user: UserDTO): Promise<{ token: string }> {
+  async login(user: UserDTO): Promise<LoginResponse | null> {
     try {
       const foundUser = await this.userModel.findOne({ email: user.email });
+      if (!foundUser) {
+        throw new Error("User not found");
+      }
       const verifyPassword = await bcrypt.compare(
         user.password,
         foundUser.password
@@ -37,6 +45,7 @@ export class AuthService {
         throw new Error("Invalid password");
       }
       return {
+        user: foundUser,
         token: await this.jwtService.signAsync({ foundUser }),
       };
     } catch (error) {

@@ -3,9 +3,10 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { MongooseModule } from "@nestjs/mongoose";
 import { UserSchema } from "src/schema/user.schema";
-import { UserService } from "src/user/user.service";
 import { UserModule } from "src/user/user.module";
 import { JwtModule } from "@nestjs/jwt";
+import { JwtStrategy } from "./guards/jwt.strategy";
+import { JwtGuard } from "./guards/jwt.guards";
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { JwtModule } from "@nestjs/jwt";
           global: true,
           secret: process.env.JWT_SECRET,
           signOptions: {
-            expiresIn: "60s",
+            expiresIn: "3600s",
           },
         };
       },
@@ -24,6 +25,6 @@ import { JwtModule } from "@nestjs/jwt";
     MongooseModule.forFeature([{ name: "User", schema: UserSchema }]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService],
+  providers: [AuthService, JwtStrategy, JwtGuard],
 })
 export class AuthModule {}
