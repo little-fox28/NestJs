@@ -20,8 +20,8 @@ export class ProductService {
     return listOfProduct;
   }
 
-  async findOne(name: string) {
-    return await this.productModel.find({ name });
+  async findOne(id: string) {
+    return await this.productModel.findById(id);
   }
 
   async updateOne(id: string, data: ProductDocument) {

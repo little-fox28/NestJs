@@ -17,7 +17,7 @@ import { JwtGuard } from "./guards/jwt.guards";
           global: true,
           secret: process.env.JWT_SECRET,
           signOptions: {
-            expiresIn: "3600s",
+            expiresIn: "60s",
           },
         };
       },
