@@ -13,9 +13,20 @@ import { FC, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 
 const RegistrationFormComponent: FC = () => {
+  const [data, setData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "",
+  });
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Submited!");
+    if (data.password !== data.confirmPassword) {
+      console.log("");
+      return false;
+    }
   };
 
   return (
@@ -34,18 +45,54 @@ const RegistrationFormComponent: FC = () => {
           <Typography variant="h5" component={"h1"} marginBottom={2}>
             Create Account
           </Typography>
-          <TextField margin="dense" required id="name" label="Name" />
-          <TextField margin="dense" required id="email" label="Email" />
-          <TextField margin="dense" required id="password" label="Password" />
           <TextField
             margin="dense"
             required
-            id="re-password"
-            label="Re-enter password"
+            id="name"
+            label="Name"
+            value={data.name}
+            onChange={(e) => setData({ ...data, name: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            required
+            id="email"
+            label="Email"
+            value={data.email}
+            onChange={(e) => setData({ ...data, email: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            required
+            id="password"
+            label="Password"
+            value={data.password}
+            onChange={(e) => setData({ ...data, password: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            required
+            id="com-password"
+            label="Confirm password"
+            value={data.confirmPassword}
+            onChange={(e) =>
+              setData({ ...data, confirmPassword: e.target.value })
+            }
           />
           <FormControl required margin="dense">
             <InputLabel id="role">Role</InputLabel>
-            <Select labelId="role" id="role" label="Role *">
+            <Select
+              labelId="role"
+              id="role"
+              label="Role *"
+              value={data.role}
+              onChange={(e) =>
+                setData({
+                  ...data,
+                  role: e.target.value,
+                })
+              }
+            >
               <MenuItem value={"admin"}>Admin</MenuItem>
               <MenuItem value={"staff"}>Staff</MenuItem>
             </Select>
